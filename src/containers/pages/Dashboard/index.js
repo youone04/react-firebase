@@ -98,9 +98,10 @@ class Dashboard extends Component {
     }
     render (){
         const { title , content , textButton} = this.state;
-        const {notes} = this.props;
+        const {notes,loadingContent} = this.props;
         const {updateNotes,cancelUpdate , deleteNote ,keluarNote}  = this;
         console.log('data notes : ' ,notes);
+        console.log('loading content => ',loadingContent);
         return (
             <div className="container">              
                 {/* removeItem = () => localStorage.removeItem("name") */}
@@ -122,7 +123,11 @@ class Dashboard extends Component {
                 <hr/>
                 {/* meloping nilai dari firebase */}
                 {
-                    // sama dengan percabnagan
+                    loadingContent?
+                    <div>
+                        <h2>loading ...</h2>
+                    </div>
+                    :// sama dengan percabangan
                     notes.length > 0 ? (
                         <Fragment>
                             {
@@ -150,7 +155,8 @@ const reduxState = (state) => ({
     //nilai state.user dari reducer
     userData : state.user,
     //nilai state.notes dari reducer yang telah diubah dari halaman action di baris ke 93 dan dapnngikl dari state global redux di halaman reducer
-    notes : state.notes
+    notes : state.notes,
+    loadingContent: state.loadingContent
 })
 const reduxDispatch = (dispatch) => ({
     // fungsi addDataToAPI dari halaman action yang dikirim lwat redux

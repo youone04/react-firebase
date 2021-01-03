@@ -4,6 +4,7 @@ const initialState = {
     popup : false,
     isLogin : false,
     isLoading : false,
+    loadingContent: true,
     status: null,
     user : {},
     notes : {}
@@ -40,6 +41,11 @@ const reducer = ( state=initialState , action ) => {
             return {
                 ...state,
                 notes : action.value
+            }
+        case 'LOADING_CONTENT' :
+            return{
+                ...state,
+                loadingContent: action.value
             }
         default : return state;
     }

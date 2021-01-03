@@ -85,6 +85,7 @@ export const getDataFromAPI = (userId) => (dispatch) =>  {
     const urlNotes = firebase.database().ref('notes/' + userId);
     // menggunakan fungsi asycncronus
     return new Promise((berhasil,gagal) => {
+        dispatch({type:'LOADING_CONTENT' , value: true})
         urlNotes.on('value', function(snapshot) {
             // updateStarCount(postElement, snapshot.val());
             console.log('mengambil data : ',snapshot.val());
@@ -93,6 +94,7 @@ export const getDataFromAPI = (userId) => (dispatch) =>  {
 
                 }
                 dispatch({type: 'SET_NOTES' ,value: data})
+                dispatch({type:'LOADING_CONTENT' , value: false})
             }else{
                 // membuat sebuah objek menjadi array
                 const data = [];
@@ -107,6 +109,7 @@ export const getDataFromAPI = (userId) => (dispatch) =>  {
                 dispatch({type: 'SET_NOTES' ,value: data})
                 // mengirim lewat fungs promise
                 berhasil(snapshot.val());
+                dispatch({type:'LOADING_CONTENT' , value: false})
             }
         });
     })
