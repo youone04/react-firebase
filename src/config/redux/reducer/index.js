@@ -13,7 +13,7 @@ const reducer = ( state=initialState , action ) => {
     switch(action.type){
         case 'CHANGE_POPUP':
         return {
-            ...state,
+            ...state,//copy semua state
             popup : action.value
         }
         case 'CHANGE_ISLOGIN' :

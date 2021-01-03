@@ -10,6 +10,16 @@ class Login extends Component {
     // changeUser =() => {
     //     this.props.changeUserName()
     // }
+    componentDidMount(){
+        const user = localStorage.getItem('userData');
+        const {history} = this.props;
+        if(user != null){
+            history.push('/dashboard');
+        }else{
+            history.push('/');
+        }
+    }
+        
     state = {
         email : '',
         password : '',
