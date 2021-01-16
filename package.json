@@ -1,7 +1,7 @@
 {
   "name": "cawaapps-firebase",
   "version": "0.1.0",
-  "homepage": "https://youone04 .github.io/react-firebase",
+  "homepage": "https://youone04.github.io/react-firebase",
   "private": false,
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
