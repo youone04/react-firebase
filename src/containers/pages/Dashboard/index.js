@@ -39,7 +39,11 @@ class Dashboard extends Component {
         }
         if(textButton === 'SIMPAN'){
             // savenotes merupakan fungsi redux yan ada di bawah, yang akan mengirimkan data ke halaman action di fungsi addToAPI yang di panggil leat redux yang fungsinya berada di bawah
+          if(title && content){
             saveNotes(data)
+          }else{
+              alert('gagal')
+          }
         }else{
             // sama kaya yang diatas
             data.noteId = noteId; //cara mensisipkan data
@@ -106,7 +110,7 @@ class Dashboard extends Component {
             <div className="container">              
                 {/* removeItem = () => localStorage.removeItem("name") */}
                 {/* e sebagai penanda seperti id atau name */}
-                <div className="keluar-note" onClick={keluarNote}><p>keluar</p></div>
+                <div className="keluar-note" onClick={keluarNote}><p className="text-keluar">Keluar</p></div>
                 <div className="input-form" >
                     <input placeholder="title" className="input-title" value={title} onChange={(e) => this.onInputChange(e,'title')} />
                     <textarea placeholder="content" className="input-title" value={content} onChange={(e) => this.onInputChange(e,'content')}>

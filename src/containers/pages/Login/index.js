@@ -5,6 +5,7 @@ import Button from '../../../components/atoms/Button';
 import { loginUserAPI } from '../../../config/redux/action';
 import './Login.scss';
 import { StatusLogin } from '../../../components/atoms/Status';
+import { Link } from 'react-router-dom'
 
 class Login extends Component {
     // changeUser =() => {
@@ -69,12 +70,13 @@ class Login extends Component {
         return (
             <div className="auth-container">
                 <div className="auth-card">
-                    <p className="auth-title">Login Page</p>
+                    <p className="auth-title">Halaman Masuk</p>
                     <input className="input" id="email" placeholder="Email" type="text" onChange= {this.handleChangeText} value={this.state.email} />
                     <input className="input" id="password" placeholder="Password" type="password" onChange = {this.handleChangeText} value={this.state.password} />
                     {/* onClick, loading dan title props yang dikrim ke atom button */}
-                    <Button onClick={this.handleLoginSubmit} title="Login" loading={this.props.isLoading} />
                     <StatusLogin status={this.props.status} />
+                    <Button onClick={this.handleLoginSubmit} title="Login" loading={this.props.isLoading} />
+                    <Link style={{textDecoration:'none'}} to="/register"><p className="text-registrasi">REGISTRASI</p></Link>
                 </div>
                 {/* <button>Dashboard</button> */}
             </div>

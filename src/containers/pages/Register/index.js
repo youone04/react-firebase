@@ -5,7 +5,7 @@ import './Register.scss';
 import { connect } from 'react-redux';
 import { registerUserAPI } from '../../../config/redux/action';
 import {Status} from '../../../components/atoms/Status';
-
+import { Link } from 'react-router-dom'
 class Register extends Component {
     //inisasi dan menampung datadari inputan
     state = {
@@ -31,6 +31,8 @@ class Register extends Component {
         .catch(err => err);
         if(res){
             //mengosongkan form setelah d submit
+            const {history} = this.props;
+            history.push('/');
             this.setState({
                 email : '',
                 password : ''
@@ -55,10 +57,11 @@ class Register extends Component {
                     <input className="input" id="email" placeholder="Email" type="text" onChange= {this.handleChangeText} value={this.state.email} />
                     <input className="input" id="password" placeholder="Password" type="password" onChange = {this.handleChangeText} value={this.state.password} />
                     {/* onClick, loading dan title props yang dikrim ke atom button */}
+                    <Status status={this.props.status} />
                     <Button onClick={this.handleRegisterSubmit} title="Register" loading={this.props.isLoading}/>
+                    <Link style={{textDecoration:'none'}} to="/"><p className="text-registrasi">LOGIN</p></Link>
                     {/* status ini dari bawah reduxSate */}
                     {/* status yang di import yaitu yang di terapkan ini(Status) status= */}
-                    <Status status={this.props.status} />
                 </div>
                 {/* <button>Dashboard</button> */}
             </div>

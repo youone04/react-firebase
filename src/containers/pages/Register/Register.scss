@@ -9,6 +9,12 @@
         padding: 16px;
         border-radius: 10px;
         box-shadow: 3px 3px 10px 0px rgba(0, 0, 0, 0.521);
+        .text-registrasi{
+            text-align: center;
+            color: green;
+            cursor: pointer;
+            text-decoration: none;
+        }
     }
     p.auth-title{
         margin: 0px;
@@ -18,7 +24,7 @@
         margin-bottom: 16px
     }
     .btn{
-        margin-top: 32px;
+        margin-top: 3px;
     }
 }
 input.input{
@@ -29,7 +35,8 @@ input.input{
     display: block;
     margin-bottom: 12px;
     min-width: 300px;
-    color: skyblue;
+    color: black;
+    font-size: 16px;
 }
 button.btn{
     padding: 16px;
