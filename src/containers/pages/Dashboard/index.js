@@ -8,49 +8,58 @@ class Dashboard extends Component {
         content : '',
         date : '',
         textButton: 'SIMPAN',
-        noteId: ''
+        noteId: '',
+        dataSearch: ''
     }
     //mengambil data
     componentDidMount(){
         //data id yang akan dikirmkan ke database diambil dr localstorage
-        const {history} = this.props;
+        const {history ,notes} = this.props;
         const userData = JSON.parse(localStorage.getItem('userData'));
         // fungsi diambil dari bawah fungsi di baris 152
         if(userData === null){
             history.push('/');
         }else{
-            this.props.getNotes(userData.uid);
+            this.props.getDataFromAPI(userData.uid);
         }
     }
     // data akan di tampilkan setelah render selasai
-    handleSaveNotes = () => {
+    handleSaveNotes = async() => {
         // menerima data dari staete diatas
         const {title,content , textButton , noteId} = this.state;
         // menerima data dari props redux dibawah
-        const {saveNotes , updateNotes} = this.props;
+        const {addDataToAPI , updateNotes} = this.props;
         //userData dari datanya di panggil dari localstorage
         const userData = JSON.parse(localStorage.getItem('userData'));
         // simpan data dalam bentuk obejek
         const data = {
             title: title,
             content: content,
-            date : new Date().getTime(),
+            date : new Date().toString(),
             userId : userData.uid
         }
         if(textButton === 'SIMPAN'){
             // savenotes merupakan fungsi redux yan ada di bawah, yang akan mengirimkan data ke halaman action di fungsi addToAPI yang di panggil leat redux yang fungsinya berada di bawah
           if(title && content){
-            saveNotes(data)
+           const keterangan =  await addDataToAPI(data);
+           if(keterangan){
+               this.setState({
+                title: '',
+                content: '',
+               })
+           }
           }else{
-              alert('gagal')
+              alert('Form Harus Terisi!')
           }
         }else{
             // sama kaya yang diatas
-            data.noteId = noteId; //cara mensisipkan data
-            updateNotes(data);
-
+            if(title && content){
+                data.noteId = noteId; //cara mensisipkan data
+                updateNotes(data);
+            }else{
+                alert('Form Harus Terisi!')
+            }
         }
-        console.log('nilai data => ',data);
     }
     onInputChange = (e,type) => {
         this.setState({
@@ -59,7 +68,6 @@ class Dashboard extends Component {
     }
     //update notes
     updateNotes  = (note) => {
-        console.log(note);
         this.setState({
             title: note.data.title,
             content: note.data.content,
@@ -100,12 +108,18 @@ class Dashboard extends Component {
         localStorage.removeItem("userData");
         history.push('/');
     }
+    handleSearch = (e) => {
+        // let data= this.props.notes.filter(data => 
+        //    data.data.title.toLowerCase().indexOf(e.target.value.toLowerCase()) > -1
+        // )
+        this.setState({
+            ['dataSearch'] : e.target.value
+        })
+    }
     render (){
-        const { title , content , textButton} = this.state;
+        const { title , content , textButton,dataSearch} = this.state;
         const {notes,loadingContent} = this.props;
         const {updateNotes,cancelUpdate , deleteNote ,keluarNote}  = this;
-        console.log('data notes : ' ,notes);
-        console.log('loading content => ',loadingContent);
         return (
             <div className="container">              
                 {/* removeItem = () => localStorage.removeItem("name") */}
@@ -124,30 +138,30 @@ class Dashboard extends Component {
                     <button className="save-btn" onClick={this.handleSaveNotes}>{textButton}</button>
                     </div>
                 </div>
+                <input placeholder="Cari Data ......" onChange={(e) => this.handleSearch(e)}/>
                 <hr/>
                 {/* meloping nilai dari firebase */}
                 {
+                    
                     loadingContent?
                     <div>
                         <h2>loading ...</h2>
                     </div>
                     :// sama dengan percabangan
-                    notes.length > 0 ? (
-                        <Fragment>
-                            {
-                                notes.map(note => {
-                                    return (
-                                        <div className="card-content" key={note.id} onClick={ () => updateNotes(note)}>
-                                            <p className="title">{note.data.title}</p>
-                                            <p className="date">{note.data.date}</p>
-                                            <p className="content">{note.data.content}</p>
-                                            <div className="delete-btn" onClick={ (e) => deleteNote(e ,note)}>X</div>
-                                        </div>
-                                    )
-                                })
-                            }
-                        </Fragment>
-                        ) : <p>kosong ..</p>
+                    notes.filter((data) =>
+                        data.data.title.toLowerCase().includes(this.state.dataSearch.toLocaleLowerCase()))
+                        .map(note => {
+                            return(
+                                <div className="card-content" key={note.id} onClick={ () => updateNotes(note)}>
+                                <p className="title">{note.data.title}</p>
+                                <p className="content">{note.data.content}</p>
+                                <p className="date">{note.data.date.substring(0,25)}</p>
+                                <div className="delete-btn" onClick={ (e) => deleteNote(e ,note)}>X</div>
+                            </div>
+                            )
+
+                        })
+                    
                 }
             </div>
         )
@@ -164,12 +178,54 @@ const reduxState = (state) => ({
 })
 const reduxDispatch = (dispatch) => ({
     // fungsi addDataToAPI dari halaman action yang dikirim lwat redux
-    saveNotes : (data) => dispatch(addDataToAPI(data)),
+    addDataToAPI : (data) => dispatch(addDataToAPI(data)),
     // mnerima data dari halaman action dengan redux
     // mengirimkan data yaitu userId dari localstroge yang diambil dari fungsi diatas
-    getNotes: (data) => dispatch(getDataFromAPI(data)),
+    getDataFromAPI: (data) => dispatch(getDataFromAPI(data)),
     updateNotes: (data) => dispatch(upadateDataAPI(data)),
     // deleteNote di panggil diatas dan deleteDataAPI dari halaman action
     deleteNote: (data) => dispatch(deleteDataAPI(data))
 })
 export default connect(reduxState,reduxDispatch)(Dashboard);
+
+// sertif.filter(sertif => sertif.nama.toLowerCase().includes(props.searchTerm.toLowerCase())).map((user) => (
+//     <tr  key={user.no_sertifikat}>
+//     <td className="th">{user.tgl_sertifikat}</td>
+//     <td className="th">{user.no_sertifikat}</td>
+//     <td className="th">{user.nama}</td>
+//     <td className="th">{user.nama_kursus}</td>
+//     <td className="th"><a type="button" className="btn btn-success" target = "_blank" rel = "noopener noreferrer" href={user.nama_file !== '-' ? 'localhost:8000/storage/sertifikat/'+user.nama_file : 'localhost:8000/api/generate/tespdf/'+user.no_sertifikat}>Lihat</a>
+//     <button style={{backgroundColor:"orange", opacity:"0.8", marginRight:"10px", marginLeft:"10px"}} type="button" className="btn btn-success" onClick={()=> setTimeout(()=> { props.history.push(`/edit/peserta/${user.email}/${user.no_sertifikat}`) }, 1000)}>Edit</button>
+//     <button type="button" className="btn btn-danger" style={{ opacity:"0.9"}} onClick= {()=>deleteSertifikat(user.no_sertifikat, sertif, setSertif)}>Delete</button> </td>
+//     </tr>
+
+// dataSearch.length > 0 ? (
+//     <Fragment>
+//         {
+//             dataSearch.map(note => {
+//                 return (
+//                     <div className="card-content" key={note.id} onClick={ () => updateNotes(note)}>
+//                         <p className="title">{note.data.title}</p>
+//                         <p className="content">{note.data.content}</p>
+//                         <p className="date">{note.data.date.substring(0,25)}</p>
+//                         <div className="delete-btn" onClick={ (e) => deleteNote(e ,note)}>X</div>
+//                     </div>
+//                 )
+//             })
+//         }
+//     </Fragment>
+//     ) : 
+//     <Fragment>
+//     {
+//         notes.map(note => {
+//             return (
+//                 <div className="card-content" key={note.id} onClick={ () => updateNotes(note)}>
+//                     <p className="title">{note.data.title}</p>
+//                     <p className="content">{note.data.content}</p>
+//                     <p className="date">{note.data.date.substring(0,25)}</p>
+//                     <div className="delete-btn" onClick={ (e) => deleteNote(e ,note)}>X</div>
+//                 </div>
+//             )
+//         })
+//     }
+// </Fragment>

@@ -83,6 +83,8 @@
         margin-bottom: 16px;
         transition: all ease 0.35s;
         position: relative;
+        margin-left: 10px;
+        margin-right: 10px;
         &:hover{
             cursor: pointer;
             background: lightblue;
@@ -97,6 +99,8 @@
         }
         .date{
             font-size: 12px;
+            margin-top: 2%;
+            color: green;
         }
         .content{
             margin-top: 20px;

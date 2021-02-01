@@ -37,13 +37,11 @@ class Login extends Component {
     handleLoginSubmit = async () => {
         const {email,password} = this.state;
         const {history} = this.props;
-        console.log('data sebelum dikirim => ',email , password);
         //props dibawah ini yang akan menerima dat email dan password
         //await disini menunggu promse dari halaman login
         const res = await this.props.loginAPI({email,password}).catch(err => err);
         //mengosongkan form setelah di submit
         if(res){
-            console.log('login success =>', res);
             // menyimpan data kedalam localStorage
             localStorage.setItem('userData', JSON.stringify(res));
             this.setState({

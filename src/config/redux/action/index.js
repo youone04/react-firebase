@@ -73,10 +73,18 @@ export const loginUserAPI = (data) => (dispatch) => {
 }
 // mengirim data ke firebase
 export const addDataToAPI = (data) => (dispatch) => {
-    database.ref('notes/' + data.userId).push({
-        title: data.title,
-        content: data.content,
-        date: data.date
+    return new Promise((berhasil ,gagal) => {
+        database.ref('notes/' + data.userId).push({
+            title: data.title,
+            content: data.content,
+            date: data.date
+        })
+        .then(data => {
+            berhasil(true);
+        })
+        .catch(err => {
+            gagal(false);
+        })
     })
 }
 //mengambil data dari firebase
@@ -88,7 +96,6 @@ export const getDataFromAPI = (userId) => (dispatch) =>  {
         dispatch({type:'LOADING_CONTENT' , value: true})
         urlNotes.on('value', function(snapshot) {
             // updateStarCount(postElement, snapshot.val());
-            console.log('mengambil data : ',snapshot.val());
             if(snapshot.val()===null){
             const data = {
 
