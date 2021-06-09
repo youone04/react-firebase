@@ -147,3 +147,13 @@ export const deleteDataAPI = (data) => (dispatch) =>  {
         urlNotes.remove();
     })
 }
+
+// update count di halaman redux
+export const updateCount = () => (dispatch) => {
+    dispatch({type:'UPDATE_COUNT', value: 1})
+}
+
+// update min halaman redux
+export const updateMin = () => (dispatch) => {
+    dispatch({type: 'UPDATE_MIN', value: 1})
+}

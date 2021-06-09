@@ -6,6 +6,7 @@ import Login from '../Login';
 import Register from '../Register';
 import {Provider} from 'react-redux';
 import {store} from '../../../config/redux';
+import Redux from '../Redux';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
             <Route path='/' exact component={Login} />   
             <Route path='/dashboard' component={Dashboard} />  
             <Route path='/register' component={Register} />
+            <Route path="/redux" component={Redux} />
         </div>
       </Router>
     </Provider>

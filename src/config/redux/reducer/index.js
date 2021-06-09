@@ -7,7 +7,8 @@ const initialState = {
     loadingContent: true,
     status: null,
     user : {},
-    notes : {}
+    notes : {},
+    count : 0
     }
   //reducer (kumpulan instruksi) yang kirimkan oleh dispatch
 const reducer = ( state=initialState , action ) => {
@@ -47,6 +48,19 @@ const reducer = ( state=initialState , action ) => {
                 ...state,
                 loadingContent: action.value
             }
+        case 'UPDATE_COUNT': {
+           return{
+            ...state,
+            count: state.count + action.value
+           }
+
+        }
+        case 'UPDATE_MIN': {
+            return{
+                ...state,
+                count: state.count - action.value
+            }
+        }
         default : return state;
     }
 }
