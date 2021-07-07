@@ -1,4 +1,4 @@
-import React , {Component,Fragment} from 'react';
+import React , {Component} from 'react';
 import './Dashboard.scss';
 import { connect } from 'react-redux';
 import {addDataToAPI, getDataFromAPI , upadateDataAPI , deleteDataAPI} from '../../../config/redux/action';
@@ -14,7 +14,7 @@ class Dashboard extends Component {
     //mengambil data
     componentDidMount(){
         //data id yang akan dikirmkan ke database diambil dr localstorage
-        const {history ,notes} = this.props;
+        const {history} = this.props;
         const userData = JSON.parse(localStorage.getItem('userData'));
         // fungsi diambil dari bawah fungsi di baris 152
         if(userData === null){
@@ -109,11 +109,9 @@ class Dashboard extends Component {
         history.push('/');
     }
     handleSearch = (e) => {
-        // let data= this.props.notes.filter(data => 
-        //    data.data.title.toLowerCase().indexOf(e.target.value.toLowerCase()) > -1
-        // )
+        // let newData = {...this.state}
         this.setState({
-            ['dataSearch'] : e.target.value
+            dataSearch : e.target.value
         })
     }
     render (){
@@ -132,7 +130,7 @@ class Dashboard extends Component {
                     <div className="action-wrap">
                         {
                             textButton === 'UPDATE' ? (
-                                <button className="save-btn cancel" onClick={this.handleSaveNotes} onClick={cancelUpdate} >Cancel</button>
+                                <button className="save-btn cancel" onClick={cancelUpdate} >Cancel</button>
                             ) : <div/>
                         }
                     <button className="save-btn" onClick={this.handleSaveNotes}>{textButton}</button>
@@ -148,8 +146,12 @@ class Dashboard extends Component {
                         <h2>loading ...</h2>
                     </div>
                     :// sama dengan percabangan
-                    notes.filter((data) =>
-                        data.data.title.toLowerCase().includes(this.state.dataSearch.toLocaleLowerCase()))
+                   
+                    Object.keys(notes).length>0?notes.filter((data) =>
+                    // console.log(data)
+                        data.data.title.toLowerCase().includes(dataSearch.toLocaleLowerCase())
+                        )
+                       
                         .map(note => {
                             return(
                                 <div className="card-content" key={note.id} onClick={ () => updateNotes(note)}>
@@ -160,7 +162,7 @@ class Dashboard extends Component {
                             </div>
                             )
 
-                        })
+                        }):''
                     
                 }
             </div>

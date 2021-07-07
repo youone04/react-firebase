@@ -107,7 +107,7 @@ export const getDataFromAPI = (userId) => (dispatch) =>  {
                 const data = [];
                 // snapshot dari fungsi firebase yang berisi data yang di panggil
                 Object.keys(snapshot.val()).map(key =>{
-                    data.push({
+                   return data.push({
                         id: key,
                         data: snapshot.val()[key]
                     })
